@@ -12,6 +12,16 @@
 #ifndef INCLUDES_H
 #define INCLUDES_H
 
+#ifdef _WIN32
+#  ifdef LIBQALCULATE_EXPORTS
+#    define QALCULATE_EXPORT __declspec(dllexport)
+#  else
+#    define QALCULATE_EXPORT __declspec(dllimport)
+#  endif
+#else
+#  define QALCULATE_EXPORT
+#endif
+
 /** @file */
 
 #include <vector>
@@ -809,12 +819,12 @@ struct EvaluationOptions {
 static const EvaluationOptions default_evaluation_options;
 static EvaluationOptions default_user_evaluation_options;
 
-extern MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one, m_one_i;
-extern Number nr_zero, nr_one, nr_two, nr_three, nr_minus_one, nr_one_i, nr_minus_i, nr_half, nr_minus_half, nr_plus_inf, nr_minus_inf;
-extern EvaluationOptions no_evaluation;
-extern ExpressionName empty_expression_name;
+extern QALCULATE_EXPORT MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one, m_one_i;
+extern QALCULATE_EXPORT Number nr_zero, nr_one, nr_two, nr_three, nr_minus_one, nr_one_i, nr_minus_i, nr_half, nr_minus_half, nr_plus_inf, nr_minus_inf;
+extern QALCULATE_EXPORT EvaluationOptions no_evaluation;
+extern QALCULATE_EXPORT ExpressionName empty_expression_name;
 
-extern Calculator *calculator;
+extern QALCULATE_EXPORT Calculator *calculator;
 
 #define CALCULATOR	calculator
 

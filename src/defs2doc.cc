@@ -14,9 +14,9 @@
 #include <sys/stat.h>
 #ifndef _MSC_VER
 #	include <unistd.h>
+#	include <pthread.h>
 #endif
 #include <time.h>
-#include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>

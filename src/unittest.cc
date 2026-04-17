@@ -1,7 +1,12 @@
 #ifndef _MSC_VER
 #	include <unistd.h>
+#	include <dirent.h>
+#else
+#	include <windows.h>
+#	include <direct.h>
+#	define getcwd _getcwd
+#	define chdir _chdir
 #endif
-#include <dirent.h>
 #include <errno.h>
 #include <cstdlib>
 #include <cstdio>
@@ -72,6 +77,28 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		char path[] = "./tests";
+#ifdef _MSC_VER
+		HANDLE hFind;
+		WIN32_FIND_DATA FindFileData;
+		char findPath[500];
+		snprintf(findPath, 500, "%s/*", path);
+		if((hFind = FindFirstFile(findPath, &FindFileData)) != INVALID_HANDLE_VALUE) {
+			do {
+				if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+					char *filename = FindFileData.cFileName;
+					if(ends_with(filename, ".batch")) {
+						printf("Running unit tests from '%s'\n", filename);
+						char fullPath[4096] = "";
+						strcat(fullPath, path);
+						strcat(fullPath, "\\");
+						strcat(fullPath, filename);
+						run_unit_test(fullPath, in_srcdir ? curdir : NULL);
+					}
+				}
+			} while(FindNextFile(hFind, &FindFileData));
+			FindClose(hFind);
+		}
+#else
 		DIR *d;
 		struct dirent *dir;
 		d = opendir(path);
@@ -96,6 +123,7 @@ int main(int argc, char *argv[]) {
 			}
 			closedir(d);
 		}
+#endif
 	} else if(argc == 2) {
 		char *filename = argv[1];
 		run_unit_test(filename);

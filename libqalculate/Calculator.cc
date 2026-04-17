@@ -24,7 +24,8 @@
 #include "Number.h"
 #include "QalculateDateTime.h"
 
-#include <locale.h>
+#include <locale>
+#include <clocale>
 #ifdef _MSC_VER
 #	include <sys/utime.h>
 #else
@@ -158,6 +159,7 @@ ExpressionName empty_expression_name;
 #endif
 
 Calculator::Calculator() {
+	calculator = this;
 	b_ignore_locale = false;
 
 #ifdef _WIN32
@@ -398,8 +400,6 @@ Calculator::Calculator() {
 	ILLEGAL_IN_UNITNAMES = ILLEGAL_IN_NAMES + NUMBERS;
 	b_argument_errors = true;
 	current_stage = MESSAGE_STAGE_UNSET;
-	calculator = this;
-	srand48(time(0));
 
 	addBuiltinVariables();
 	addBuiltinFunctions();
@@ -413,7 +413,7 @@ Calculator::Calculator() {
 	calculate_thread = new CalculateThread;
 }
 Calculator::Calculator(bool ignore_locale) {
-
+	calculator = this;
 	b_ignore_locale = ignore_locale;
 
 	if(b_ignore_locale) {
@@ -664,8 +664,6 @@ Calculator::Calculator(bool ignore_locale) {
 	ILLEGAL_IN_UNITNAMES = ILLEGAL_IN_NAMES + NUMBERS;
 	b_argument_errors = true;
 	current_stage = MESSAGE_STAGE_UNSET;
-	calculator = this;
-	srand48(time(0));
 
 	addBuiltinVariables();
 	addBuiltinFunctions();

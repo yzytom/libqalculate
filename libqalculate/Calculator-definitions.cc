@@ -182,7 +182,27 @@ bool Calculator::loadLocalDefinitions() {
 				recursiveMakeDir(getLocalDataDir());
 			}
 			if(makeDir(homedir)) {
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+				list<string> eps_old;
+				HANDLE hFindOld;
+				WIN32_FIND_DATA FindFileDataOld;
+				if((hFindOld = FindFirstFile(buildPath(homedir_old, "*").c_str(), &FindFileDataOld)) != INVALID_HANDLE_VALUE) {
+					do {
+						if(!(FindFileDataOld.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+							if(strcmp(FindFileDataOld.cFileName, "..") != 0 && strcmp(FindFileDataOld.cFileName, ".") != 0 && strcmp(FindFileDataOld.cFileName, "datasets") != 0) {
+								eps_old.push_back(FindFileDataOld.cFileName);
+							}
+						}
+					} while(FindNextFile(hFindOld, &FindFileDataOld));
+					FindClose(hFindOld);
+				}
+				for(list<string>::iterator it = eps_old.begin(); it != eps_old.end(); ++it) {
+					move_file(buildPath(homedir_old, *it).c_str(), buildPath(homedir, *it).c_str());
+				}
+				if(removeDir(homedir_old)) {
+					removeDir(getOldLocalDir());
+				}
+#else
 				list<string> eps_old;
 				struct dirent *ep_old;
 				DIR *dp_old = opendir(homedir_old.c_str());

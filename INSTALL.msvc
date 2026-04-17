@@ -1,0 +1,12 @@
+step 1:
+vcpkg install gmp mpfr libxml2 curl icu readline
+step 2:
+cd libqalculate
+mkdir build
+cd build
+step 3:
+cmake .. -G "Visual Studio 17 2022" -A x64
+msbuild libqalculate.sln -p:Configuration=Release
+Or
+cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+ninja

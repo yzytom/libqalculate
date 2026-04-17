@@ -832,7 +832,7 @@ bool removeDir(string dirpath) {
 }
 
 #ifdef _MSC_VER
-#	define ICONV_CONST const
+#	define ICONV_CONST
 #endif
 char *locale_from_utf8(const char *str) {
 #ifdef HAVE_ICONV

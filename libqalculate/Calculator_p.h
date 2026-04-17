@@ -9,7 +9,7 @@
     (at your option) any later version.
 */
 
-#if HAVE_UNORDERED_MAP
+#if HAVE_UNORDERED_MAP || (defined(_MSC_VER) && _MSC_VER >= 1600)
 #	include <unordered_map>
 	using std::unordered_map;
 #elif 	defined(__GNUC__)

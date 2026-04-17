@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "**/.hlasmplugin/proc_grps.json": "jsonc",
+        "**/.hlasmplugin/pgm_conf.json": "jsonc",
+        "xstring": "cpp",
+        "list": "cpp",
+        "vector": "cpp",
+        "sstream": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
+    }
+}

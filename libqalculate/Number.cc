@@ -1274,6 +1274,15 @@ void Number::set(long int numerator, long int denominator, long int exp_10, bool
 void Number::setFloat(long double d_value) {
 	b_approx = true;
 	if(n_type != NUMBER_TYPE_FLOAT) {mpfr_init2(fu_value, BIT_PRECISION); mpfr_init2(fl_value, BIT_PRECISION);}
+#ifdef _MSC_VER
+	if(CREATE_INTERVAL) {
+		mpfr_set_d(fu_value, (double) d_value, MPFR_RNDU);
+		mpfr_set_d(fl_value, (double) d_value, MPFR_RNDD);
+	} else {
+		mpfr_set_d(fl_value, (double) d_value, MPFR_RNDN);
+		mpfr_set(fu_value, fl_value, MPFR_RNDN);
+	}
+#else
 	if(CREATE_INTERVAL) {
 		mpfr_set_ld(fu_value, d_value, MPFR_RNDU);
 		mpfr_set_ld(fl_value, d_value, MPFR_RNDD);
@@ -1281,6 +1290,7 @@ void Number::setFloat(long double d_value) {
 		mpfr_set_ld(fl_value, d_value, MPFR_RNDN);
 		mpfr_set(fu_value, fl_value, MPFR_RNDN);
 	}
+#endif
 	n_type = NUMBER_TYPE_FLOAT;
 	mpq_set_ui(r_value, 0, 1);
 	if(i_value) i_value->clear();
